@@ -8,7 +8,7 @@ import searchSlice from "./searchSlice";
 const rootReducer = combineReducers({
   app: userReducer,
   movie: movieReducer,
-  searchMovie: searchSlice
+  searchMovie: searchSlice,
 });
 
 const persistConfig = {
