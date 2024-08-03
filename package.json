@@ -3,8 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "webpack serve",
-    "build": "webpack"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "build": "webpack --mode production"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
