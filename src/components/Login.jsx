@@ -21,56 +21,41 @@ const Login = () => {
     const loginHandler = () => {
         setIsLogin(!isLogin);
     }
-    const getInputData = async (e)=>{
+    const getInputData = async (e) => {
         e.preventDefault();
         dispatch(setLoading(true));
-        if(isLogin){
-            //login
-            const user = {email,password}; 
-            try {
-                const res = await axios.post(`${API_END_POINT}/login`, user,{
-                    headers:{
-                        'Content-Type':'application/json'
-                    },
-                    withCredentials:true
-                });
-                if(res.data.success){
-                    toast.success(res.data.message);
+        try {
+            const user = isLogin ? { email, password } : { fullName, email, password };
+            const endpoint = isLogin ? `${API_END_POINT}/login` : `${API_END_POINT}/register`;
+            
+            const res = await axios.post(endpoint, user, {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true,
+            });
+    
+            if (res.data.success) {
+                toast.success(res.data.message);
+                if (isLogin) {
+                    dispatch(setUser(res.data.user));
+                    navigate("/browse");
+                } else {
+                    setIsLogin(true);
                 }
-                dispatch(setUser(res.data.user));
-                navigate("/browse");
-            } catch (error) {
-                toast.error(error.response.data.message);
-                console.log(error);
-            } finally {
-                dispatch(setLoading(false));
+            } else {
+                throw new Error('Unexpected response');
             }
-        }else{
-            //register
-            dispatch(setLoading(true));
-            const user = {fullName, email, password};
-            try {
-                const res = await axios.post(`${API_END_POINT}/register`,user,{
-                    headers:{
-                        'Content-Type':'application/json'
-                    },
-                    withCredentials:true
-                });
-                if(res.data.success){
-                    toast.success(res.data.message);
-                }
-                setIsLogin(true);
-            } catch (error) {
-                toast.error(error.response.data.message);
-                console.log(error);
-            } finally{
-                dispatch(setLoading(false));
-            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message || 'An error occurred');
+            console.log(error);
+        } finally {
+            dispatch(setLoading(false));
         }
+    
         setFullName("");
         setEmail("");
         setPassword("");
     }
+    
     
     return (
         <div>
