@@ -16,10 +16,9 @@
         "dest": "Backend/server.js"
       },
       {
-        "src": "/browser",
-        "dest": "/"
+        "src": "/(.*)",
+        "dest": "netflix-frontend/dist/$1"
       }
     ]
   }
-  
   
